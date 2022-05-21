@@ -5,22 +5,28 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: run build
+    strategy:
+      matrix:
+        node: [ 14, 16 ]
+    name: run build on node v${{ matrix.node }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.node }}
       - run: npm ci
       - run: npm run build
 
   test:
     runs-on: ubuntu-latest
-    name: run tests
+    strategy:
+      matrix:
+        node: [ 14, 16 ]
+    name: run tests on node v${{ matrix.node }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.node }}
       - run: npm ci
       - run: npm test
